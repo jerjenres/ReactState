@@ -1,10 +1,16 @@
 import TaskButton from './Components/TaskButton';
 import * as React from 'react';
 import AdmitTaskButton from './Components/AdmitTaskButton';
+import List from './Components/List';
 import SetTimeOutExample from './Components/SetTimeout';
+import { useState, useEffect } from "react";
 
 function App() {
   const [taskQueue, setTaskQueue] = React.useState([]);
+  const [priorityList, setPriorityList] = React.useState([]);
+  const [regularList2, setRegularList2] = React.useState([]);
+  const [regularList3, setRegularList3] = React.useState([]);
+  const [regularList4, setRegularList4] = React.useState([]);
 
   const addRandomTask = () => {
     if (taskQueue.length < 18) {
@@ -14,12 +20,40 @@ function App() {
     }
   };
 
+  const admitTask = () => {
+    if (taskQueue.length === 0) return;
+
+    const task = taskQueue[0];
+    setTaskQueue(taskQueue.slice(1));
+
+    if (task.color === 'red') {
+      setPriorityList([...priorityList, task]);
+    } else {
+      if (regularList2.length === 0) {
+        setRegularList2([...regularList2, task]);
+      } else if (regularList3.length === 0) {
+        setRegularList3([...regularList3, task]);
+      } else if (regularList4.length === 0) {
+        setRegularList4([...regularList4, task]);
+      } else {
+        // Round-robin logic
+        if (regularList2.length <= regularList3.length && regularList2.length <= regularList4.length) {
+          setRegularList2([...regularList2, task]);
+        } else if (regularList3.length <= regularList2.length && regularList3.length <= regularList4.length) {
+          setRegularList3([...regularList3, task]);
+        } else {
+          setRegularList4([...regularList4, task]);
+        }
+      }
+    }
+  };
+
   return (
     <>
-      <div className = 'container'>
+      <div className='container'>
         <div className="taskContainer">
           <br></br>
-          <TaskButton addRandomTask = {addRandomTask}/>
+          <TaskButton addRandomTask={addRandomTask} />
           <h1>Task Queue</h1>
           <div className="taskQueueList">
             {taskQueue.map((task, index) => (
@@ -28,64 +62,28 @@ function App() {
               </p>
             ))}
           </div>
-          <AdmitTaskButton/>
+          <AdmitTaskButton admitTask={admitTask} />
         </div>
 
         <div className="container2">
           <div className="queue1">
             <h2>High Priority Queue 1</h2>
-            <p>Queue List</p>
-            <div className="priorityList1 list">
-
-            </div>
-            
-            <p>Duration:</p>
-
-            <div className="duration1 d">
-              <SetTimeOutExample></SetTimeOutExample>
-            </div>
+            <List tasks={priorityList} setTasks={setPriorityList} duration={2500} />
           </div>
-          
+
           <div className="queue2">
             <h2>Regular Queue 2</h2>
-
-            <p>Queue List</p>
-            <div className="regularList2 list">
-
-            </div>
-
-            <p>Duration:</p>
-
-            <div className="duration2 d">
-              <SetTimeOutExample></SetTimeOutExample>
-            </div>
+            <List tasks={regularList2} setTasks={setRegularList2} duration={2500} />
           </div>
-          
+
           <div className="queue3">
             <h2>Regular Queue 3</h2>
-            <p>Queue List</p>
-            <div className="regularList3 list">
-            
-            </div>
-            <p>Duration:</p>
-
-            <div className="duration3 d">
-              <SetTimeOutExample></SetTimeOutExample>
-            </div>
+            <List tasks={regularList3} setTasks={setRegularList3} duration={2500} />
           </div>
 
           <div className="queue4">
             <h2>Regular Queue 4</h2>
-            <p>Queue List</p>
-            <div className="regularList4 list">
-
-            </div>
-            <p>Duration:</p>
-
-            <div className="duration4 d">
-              <SetTimeOutExample></SetTimeOutExample>
-            </div>
-            
+            <List tasks={regularList4} setTasks={setRegularList4} duration={2500} />
           </div>
         </div>
       </div>
@@ -93,4 +91,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

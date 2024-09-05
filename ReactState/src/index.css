@@ -97,6 +97,7 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: 0;
   
 }
 
@@ -151,10 +152,36 @@ button:focus-visible {
 }
 
 .list {
-  /* border: 1px solid white; */
-  height: 30px;
+  width: auto;
+  height: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid white;
 }
 
-.d {
-  margin-left: 10px;
+.list p {
+  margin: 0;
+  border: 1px solid black; 
+  padding: 5px;
+  width: 25px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  align-items: center;
+  text-align: center;
+}
+
+.duration {
+  display: flex;
+  text-align: center;
+  justify-content: flex-start;
+  flex-direction: row;
+  /* border: 1px solid wheat; */
+}
+
+.bar {
+  margin-top: 20px;
 }

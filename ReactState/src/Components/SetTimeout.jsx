@@ -1,23 +1,39 @@
 import { useState, useEffect } from "react";
 
-export default function SetTimeOutExample() {
-    const [width, setWidth] = useState(150);
+export default function SetTimeOutExample({ onTimeout, duration }) {
+    const [width, setWidth] = useState(100);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setWidth((prevWidth) => {
-                const newWidth = prevWidth - 30;
-                return newWidth < 0 ? 0 : newWidth;
-            });
-            console.log(width);
-        }, 400);
+        const interval = 50; // Update progress every 100ms
+        const decrement = (interval / duration) * 150;
 
-        return () => clearTimeout(timer); // Clear timeout if the component unmounts or width changes
-    }, [width]);
+        const timer = setInterval(() => {
+            setWidth((prevWidth) => {
+                const newWidth = prevWidth - decrement;
+                if (newWidth <= 0) {
+                    clearInterval(timer);
+                    onTimeout();
+                    return 0;
+                }
+                return newWidth;
+            });
+        }, interval);
+
+        return () => clearInterval(timer);
+    }, [onTimeout, duration]);
 
     return (
-        <>
-            <div style={{ width: width, backgroundColor: "#fff" }}>&nbsp;</div>
-        </>
+        <div style={{ width: '200px', backgroundColor: '#e0e0e0', borderRadius: '5px', marginLeft: '20px'}}>
+            <div
+                style={{
+                    
+                    width: `${width}%`,
+                    height: '20px',
+                    backgroundColor: '#76c7c0',
+                    borderRadius: '5px',
+                    transition: 'width 0.1s linear',
+                }}
+            />
+        </div>
     );
 }
